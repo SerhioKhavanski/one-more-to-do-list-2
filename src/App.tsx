@@ -1,45 +1,20 @@
 import './App.css'
-import { useState } from 'react'
-const tasks = [
-  {
-    id: 1,
-    title: "Купить продукты на неделю",
-    isDone: false,
-    addedAt: "1 сентября",
-    priority: 2,
-  },
-  {
-    id: 2,
-    title: "Полить цветы",
-    isDone: true,
-    addedAt: "2 сентября",
-    priority: 0,
-  },
-  {
-    id: 3,
-    title: "Сходить на тренировку",
-    isDone: false,
-    addedAt: "3 сентября",
-    priority: 1,
-  },
-  {
-    id: 4,
-    title: "Срочно отправить рабочий отчет",
-    isDone: false,
-    addedAt: "4 сентября",
-    priority: 4,
-  },
-  {
-    id: 5,
-    title: "Заплатить за коммунальные услуги",
-    isDone: false,
-    addedAt: "3 сентября",
-    priority: 3,
-  },
-]
+import { useState,useEffect } from 'react'
+
 function App() {
 
   const[selectedTaskId,setSelectedTaskId] = useState(null)
+  const[tasks, setTasks]=useState(null)
+  useEffect(()=>{
+    fetch('https://trelly.it-incubator.app/api/1.0/boards/tasks',{
+      headers:{
+        'api-key':'01774c8c-0fec-4605-8f76-5d575b387023'
+      }
+    }).then(res=>res.json())
+    .then(json=>{
+      setTasks(json.data)
+    })
+  },[])
 
   return (
     <>
@@ -52,14 +27,14 @@ function App() {
             <span>На сегодня тасков нет</span>:        
               <ul className="tasks-lists">
                 {tasks.map(task =>(
-                  <li onClick={()=> setSelectedTaskId(task.id)} key={task.id} className ={task.priority===0?'priority-0':task.priority===1?'priority-1':task.priority===2?'priority-2':task.priority===3?'priority-3':'priority-4'} style={{border:selectedTaskId===task.id?'1px solid green':'none'}}>
-                    <h3>Заголовок: <span style={{textDecoration:task.isDone?'line-through':'none', fontWeight:'lighter'}} >{task.title}</span></h3>
+                  <li onClick={()=> setSelectedTaskId(task.id)} key={task.id} className ={task.attributes.priority===0?'priority-0':task.attributes.priority===1?'priority-1':task.attributes.priority===2?'priority-2':task.attributes.priority===3?'priority-3':'priority-4'} style={{border:selectedTaskId===task.id?'1px solid green':'none'}}>
+                    <h3>Заголовок: <span style={{textDecoration:task.attributes.status===2?'line-through':'none', fontWeight:'lighter'}} >{task.attributes.title}</span></h3>
                     <label htmlFor="isDone">
                       Статус
-                      <input type="checkbox" name="check" id="isDone" checked={task.isDone}/>
+                      <input type="checkbox" name="check" id="isDone" checked={task.attributes.status===2?true:false}/>
                     </label>
                     <p>
-                      Дата создания: {task.addedAt}
+                      Дата создания: {new Date(task.attributes.addedAt).toLocaleDateString()}
                     </p>
                   </li>
                 ))}
