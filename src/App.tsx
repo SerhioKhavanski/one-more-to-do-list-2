@@ -39,8 +39,10 @@ function App() {
                                 'api-key':'01774c8c-0fec-4605-8f76-5d575b387023'
                             }
                           }).then(res=>res.json())
-                          .then(json=>setSelectedTask(json))
-                          console.log(selectedTask);
+                          .then(json=>{
+                            const {data}= json
+                            setSelectedTask(data)
+                          })
                         } 
                           } 
                           key={task.id} 
@@ -67,16 +69,20 @@ function App() {
               </div>
               <div className="task-info">
                 <h2>Дополнительная информация о задаче</h2>
+
                 {
-                  selectedTask===null
+                  selectedTaskId === null
                   ?<span>Вы не выбрали таск</span>
+                  :selectedTask===null 
+                  ?<span>подгружаем инфо</span>
+                  :selectedTask.id!==selectedTaskId
+                  ?<span>подгружаем инфо</span>
                   :<ul className="desc"> 
-                    {/* <li>Название таска:{selectedTask.attributes.title}</li>
-                    <li>Название доски:{selectedTask.attributes.boardTitle}</li>
-                    <li>Описане:{selectedTask.attributes.description===null?'Описание отсутствует':selectedTask.attributes.description}</li> */}
+                    <li>Название таска: {selectedTask.attributes.title}</li>
+                    <li>Название доски: {selectedTask.attributes.boardTitle}</li>
+                    <li>Описане: {selectedTask.attributes.description===null?'Описание отсутствует ':selectedTask.attributes.description}</li>
                   </ul>
                 }
-                
               </div>
         </div>
     </>

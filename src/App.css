@@ -235,7 +235,7 @@ button:active{
   justify-content: space-between;
   margin-block: 1rem;
   flex-wrap: wrap;
-  align-items: top;
+  align-items: flex-start;
   gap: 20px;
 }
 .tasks{
