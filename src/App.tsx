@@ -42,6 +42,7 @@ function App() {
                           .then(json=>{
                             const {data}= json
                             setSelectedTask(data)
+                            console.log(data);
                           })
                         } 
                           } 
@@ -70,7 +71,17 @@ function App() {
               <div className="task-info">
                 <h2>Дополнительная информация о задаче</h2>
 
-                {
+                {!selectedTaskId&&!selectedTask&&<span>Вы не выбрали таск</span>}
+                {selectedTaskId&&!selectedTask&&<span>подгружаем инфо</span>}
+                {selectedTaskId&&selectedTask&&selectedTask.id!==selectedTaskId&&<span>подгружаем инфо</span>}
+                {selectedTaskId&&selectedTask&&<ul className="desc"> 
+                    <li>Название таска: {selectedTask.attributes.title}</li>
+                    <li>Название доски: {selectedTask.attributes.boardTitle}</li>
+                    <li>Описане: {selectedTask.attributes.description===null?'Описание отсутствует ':selectedTask.attributes.description}</li>
+                  </ul>}
+
+                {/* {
+
                   selectedTaskId === null
                   ?<span>Вы не выбрали таск</span>
                   :selectedTask===null 
@@ -82,7 +93,7 @@ function App() {
                     <li>Название доски: {selectedTask.attributes.boardTitle}</li>
                     <li>Описане: {selectedTask.attributes.description===null?'Описание отсутствует ':selectedTask.attributes.description}</li>
                   </ul>
-                }
+                } */}
               </div>
         </div>
     </>
